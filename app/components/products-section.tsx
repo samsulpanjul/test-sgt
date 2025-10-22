@@ -8,8 +8,12 @@ import { getProducts } from "../fetcher/products";
 import ProductsTable from "./products/table.products";
 
 import type { Product, ProductListResponse } from "../types";
+import ButtonLogout from "./ui/button-logout";
+import { useAuth } from "../context/auth-context";
 
 export default function ProductsSection() {
+  const { user, initializing } = useAuth();
+
   const [data, setData] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,19 +52,33 @@ export default function ProductsSection() {
     setSearch(e.target.value);
   };
 
+  if (initializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 mt-8 mb-24">
-      <div className="flex gap-4 items-center">
-        <ModalForm
-          type="create"
-          onSuccess={() => fetchData(page, limit, debouncedSearch)}
-        />
-        <Input
-          placeholder="Search Product"
-          style={{ width: "12rem" }}
-          value={search}
-          onChange={handleChange}
-        />
+      <div className="flex justify-between">
+        <div className="flex gap-4 items-center">
+          <ModalForm
+            type="create"
+            onSuccess={() => fetchData(page, limit, debouncedSearch)}
+          />
+          <Input
+            placeholder="Search Product"
+            style={{ width: "12rem" }}
+            value={search}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex items-center gap-4">
+          <p>{user?.email}</p>
+          <ButtonLogout />
+        </div>
       </div>
 
       <ProductsTable

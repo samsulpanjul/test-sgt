@@ -1,6 +1,7 @@
-import { Dropdown, MenuProps, Space } from "antd";
+import { Button, Dropdown, MenuProps, Space } from "antd";
 import ModalForm from "./modal-form.products";
 import { Product } from "../../types";
+import { MoreOutlined } from "@ant-design/icons";
 
 interface Props {
   data?: Product;
@@ -20,12 +21,8 @@ export default function ProductsDropdown({ data, onSuccess }: Props) {
   ];
 
   return (
-    <div>
-      <Dropdown menu={{ items }}>
-        <a onClick={(e) => e.preventDefault()}>
-          <Space>Action</Space>
-        </a>
-      </Dropdown>
-    </div>
+    <Dropdown menu={{ items }}>
+      <Button type="text" size="small" icon={<MoreOutlined />} />
+    </Dropdown>
   );
 }

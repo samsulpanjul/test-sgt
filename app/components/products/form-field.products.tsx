@@ -34,6 +34,7 @@ export default function FormField({
       console.error("Error submitting form:", error);
     } finally {
       setOpen(false);
+      form.resetFields();
     }
   };
 

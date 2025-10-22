@@ -1,8 +1,10 @@
-import { URL } from "@/app/constants/external-routes";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import { URL } from "@/app/constants/external-routes";
 
 export async function GET(req: NextRequest) {
+  const token = req.headers.get("authorization");
+
   try {
     const { searchParams } = req.nextUrl;
 
@@ -11,6 +13,9 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get("search") || "";
 
     const response = await axios.get(`${URL}/api/web/v1/products`, {
+      headers: {
+        Authorization: token,
+      },
       params: {
         page,
         limit,
