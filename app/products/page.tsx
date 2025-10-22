@@ -1,10 +1,10 @@
-import React from "react";
-import { Table } from "antd";
+import ProductsSection from "../components/products-section";
 
 export default function ProductsPage() {
   return (
-    <div>
+    <div className="mx-24">
       <p>Product Page</p>
+      <ProductsSection />
     </div>
   );
 }

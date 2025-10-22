@@ -1,0 +1,86 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Input, Pagination } from "antd";
+import ModalForm from "./products/modal-form.products";
+import useDebounce from "../hooks/useDebounce";
+import { getProducts } from "../fetcher/products";
+import ProductsTable from "./products/table.products";
+
+import type { Product, ProductListResponse } from "../types";
+
+export default function ProductsSection() {
+  const [data, setData] = useState<Product[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const debouncedSearch = useDebounce(search, 300);
+
+  const fetchData = async (page = 1, limit = 10, search = "") => {
+    setLoading(true);
+    try {
+      const result: ProductListResponse = await getProducts(
+        page,
+        limit,
+        search
+      );
+      setData(result.data);
+      setTotal(result.pagination.total);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setPage(1);
+    fetchData(1, limit, debouncedSearch);
+  }, [debouncedSearch]);
+
+  useEffect(() => {
+    fetchData(page, limit, debouncedSearch);
+  }, [page, limit]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  return (
+    <div className="space-y-4 mt-8 mb-24">
+      <div className="flex gap-4 items-center">
+        <ModalForm
+          type="create"
+          onSuccess={() => fetchData(page, limit, debouncedSearch)}
+        />
+        <Input
+          placeholder="Search Product"
+          style={{ width: "12rem" }}
+          value={search}
+          onChange={handleChange}
+        />
+      </div>
+
+      <ProductsTable
+        data={data}
+        loading={loading}
+        onSuccess={() => fetchData(page, limit, debouncedSearch)}
+      />
+
+      <div className="w-full flex justify-center">
+        <Pagination
+          current={page}
+          total={total}
+          pageSize={limit}
+          showSizeChanger
+          onChange={(p, l) => {
+            setPage(p);
+            setLimit(l);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
