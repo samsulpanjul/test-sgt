@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Input, Pagination, message } from "antd";
+import { Input, Pagination, Space, message, Typography } from "antd";
 import ModalForm from "./products/modal-form.products";
 import useDebounce from "../hooks/useDebounce";
 import { getProducts } from "../fetcher/products";
@@ -67,25 +67,31 @@ export default function ProductsSection() {
   }
 
   return (
-    <div className="space-y-4 mt-8 mb-24">
-      <div className="flex justify-between">
-        <div className="flex gap-4 items-center">
+    <Space
+      direction="vertical"
+      size="middle"
+      style={{ width: "100%", marginTop: "6rem", marginBottom: "6rem" }}
+    >
+      <Space style={{ width: "100%", justifyContent: "space-between" }}>
+        <Space>
           <ModalForm
             type="create"
             onSuccess={() => fetchData(page, limit, debouncedSearch)}
           />
-          <Input
+          <Input.Search
             placeholder="Search Product"
             style={{ width: "12rem" }}
             value={search}
             onChange={handleChange}
           />
-        </div>
-        <div className="flex items-center gap-4">
-          <p>{user?.email}</p>
+        </Space>
+        <Space size={"large"}>
+          <Typography.Text strong style={{ fontSize: "1.2rem" }}>
+            {user?.email}
+          </Typography.Text>
           <ButtonLogout />
-        </div>
-      </div>
+        </Space>
+      </Space>
 
       <ProductsTable
         data={data}
@@ -93,7 +99,7 @@ export default function ProductsSection() {
         onSuccess={() => fetchData(page, limit, debouncedSearch)}
       />
 
-      <div className="w-full flex justify-center">
+      <Space style={{ width: "100%", justifyContent: "center" }}>
         <Pagination
           current={page}
           total={total}
@@ -104,7 +110,7 @@ export default function ProductsSection() {
             setLimit(l);
           }}
         />
-      </div>
-    </div>
+      </Space>
+    </Space>
   );
 }

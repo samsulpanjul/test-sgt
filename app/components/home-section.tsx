@@ -1,27 +1,24 @@
 "use client";
 import Link from "next/link";
+import { Button, Space, Typography } from "antd";
 
 export default function HomeSection() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Take Home Test</h1>
-        <p className="mb-8">Simple product management</p>
-        <div className="space-x-4">
-          <Link
-            href="/auth/login"
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Login
+      <Space direction="vertical" align="center">
+        <Typography.Title>Take Home Test</Typography.Title>
+        <Typography.Text>Simple product management</Typography.Text>
+        <Space style={{ marginTop: 24 }}>
+          <Link href="/auth/login">
+            <Button color="blue" variant="solid" size="large">
+              Login
+            </Button>
           </Link>
-          <Link
-            href="/auth/register"
-            className="border border-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-50"
-          >
-            Register
+          <Link href="/auth/register">
+            <Button size="large">Register</Button>
           </Link>
-        </div>
-      </div>
+        </Space>
+      </Space>
     </div>
   );
 }
