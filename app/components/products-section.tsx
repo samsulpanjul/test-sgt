@@ -11,7 +11,7 @@ import { useAuth } from "../context/auth-context";
 import type { Product, ProductListResponse } from "../types";
 
 export default function ProductsSection() {
-  const { user, initializing, logout } = useAuth();
+  const { user, initializing } = useAuth();
 
   const [data, setData] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -35,7 +35,6 @@ export default function ProductsSection() {
           result.data.includes("Firebase ID token")
         ) {
           message.error(result.data);
-          // await logout();
           return;
         }
       } else {

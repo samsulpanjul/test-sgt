@@ -12,13 +12,6 @@ export interface FieldType {
   product_image?: string;
 }
 
-export interface ProductListParams {
-  page: number; // Current page number
-  limit: number; // Items per page
-  offset: number; // Calculate from page & limit
-  search?: string; // Search term
-}
-
 export interface Pagination {
   page: number;
   limit: number;

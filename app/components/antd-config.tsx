@@ -11,7 +11,6 @@ export default function AntdConfig({ children }: Props) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Cek system preference user
     const systemIsDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
     ).matches;
