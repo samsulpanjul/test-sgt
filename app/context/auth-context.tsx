@@ -25,12 +25,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [initializing, setInitializing] = useState(true);
 
   const setTokenCookie = async (user: User) => {
-    const token = await getIdToken(user);
-
-    // Set cookie 1 hour expired time
-    const expires = new Date(Date.now() + 60 * 60 * 1000);
-
-    document.cookie = `token=${token}; path=/; expires=${expires.toUTCString()}; secure; samesite=lax`;
+    try {
+      const token = await getIdToken(user);
+      document.cookie = `token=${token}; path=/; secure; samesite=lax`;
+    } catch (error) {
+      console.error("Error setting token cookie:", error);
+    }
   };
 
   const removeTokenCookie = () => {
@@ -53,13 +53,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = async () => {
-    await signOut(auth);
-    removeTokenCookie();
-    setUser(null);
+    try {
+      await signOut(auth);
+      removeTokenCookie();
+      setUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const getToken = async () => {
-    if (!auth.currentUser) return null;
+    if (!auth.currentUser) {
+      removeTokenCookie();
+      return null;
+    }
     return await getIdToken(auth.currentUser);
   };
 

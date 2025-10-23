@@ -29,7 +29,7 @@ export default function FormField({
     try {
       setConfirmLoading(true);
       data ? handleUpdateProduct(values) : handleAddProduct(values);
-      await onSuccess?.();
+      await onSuccess();
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {

@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Input, Pagination } from "antd";
+import { Input, Pagination, message } from "antd";
 import ModalForm from "./products/modal-form.products";
 import useDebounce from "../hooks/useDebounce";
 import { getProducts } from "../fetcher/products";
 import ProductsTable from "./products/table.products";
-
-import type { Product, ProductListResponse } from "../types";
 import ButtonLogout from "./ui/button-logout";
 import { useAuth } from "../context/auth-context";
+import type { Product, ProductListResponse } from "../types";
 
 export default function ProductsSection() {
-  const { user, initializing } = useAuth();
+  const { user, initializing, logout } = useAuth();
 
   const [data, setData] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -30,9 +29,20 @@ export default function ProductsSection() {
         limit,
         search
       );
-      setData(result.data);
-      setTotal(result.pagination.total);
-    } catch (error) {
+      if (!Array.isArray(result.data)) {
+        if (
+          typeof result.data === "string" &&
+          result.data.includes("Firebase ID token")
+        ) {
+          message.error(result.data);
+          // await logout();
+          return;
+        }
+      } else {
+        setData(result.data);
+        setTotal(result.pagination.total);
+      }
+    } catch (error: any) {
       console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
@@ -40,13 +50,10 @@ export default function ProductsSection() {
   };
 
   useEffect(() => {
-    setPage(1);
-    fetchData(1, limit, debouncedSearch);
-  }, [debouncedSearch]);
-
-  useEffect(() => {
-    fetchData(page, limit, debouncedSearch);
-  }, [page, limit]);
+    if (!initializing && user) {
+      fetchData(page, limit, debouncedSearch);
+    }
+  }, [initializing, user, page, limit, debouncedSearch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

@@ -75,7 +75,7 @@ export default function LoginPage() {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4 w-80 mx-auto border p-6">
       <p className="text-4xl font-semibold">Login</p>
       <div className="space-y-4">
         <Input
@@ -113,6 +113,6 @@ export default function LoginPage() {
           Register
         </Link>
       </p>
-    </>
+    </div>
   );
 }

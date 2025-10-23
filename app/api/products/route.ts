@@ -3,7 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { URL } from "@/app/constants/external-routes";
 
 export async function GET(req: NextRequest) {
-  const token = req.headers.get("authorization");
+  const tokenHeader = req.headers.get("authorization") || "";
+  const token = tokenHeader.startsWith("Bearer ")
+    ? tokenHeader.slice(7)
+    : tokenHeader;
 
   try {
     const { searchParams } = req.nextUrl;

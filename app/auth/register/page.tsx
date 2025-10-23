@@ -42,7 +42,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-4 w-80 mx-auto border p-6">
       <p className="text-4xl font-semibold">Register</p>
       <Input
         placeholder="Email"
@@ -75,6 +75,6 @@ export default function RegisterPage() {
           Login
         </Link>
       </p>
-    </>
+    </div>
   );
 }

@@ -31,6 +31,6 @@ export interface ProductListResponse {
   status_code: string;
   is_success: boolean;
   error_code: null | string;
-  data: Product[] | [];
+  data: Product[] | [] | string;
   pagination: Pagination;
 }
